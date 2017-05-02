@@ -1,6 +1,6 @@
 # MicroRb
 
-MicroRb allows you to developer micro services for the [micro](https://github.com/micro/micro) framework.
+MicroRb allows you to develop micro services for the [micro](https://github.com/micro/micro) framework.
 MicroRb uses the [sidecar](https://github.com/micro/micro/tree/master/car) that comes with micro. If you want to write services in Go see [go-micro](https://github.com/micro/go-micro) or in java see [ja-micro](https://github.com/Sixt/ja-micro). 
 
 ## Installation
