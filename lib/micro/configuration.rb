@@ -7,7 +7,7 @@ module MicroRb
 
     # The default Configuration object.
     def self.default
-      @@default ||= Configuration.new
+      @default ||= Configuration.new
     end
 
     def self.configure

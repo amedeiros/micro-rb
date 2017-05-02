@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Andrew Medeiros']
   spec.email         = ['andrew@amedeiros.com']
 
-  spec.summary       = %q{Write micro services in Ruby for the Micro framework}
+  spec.summary       = 'Write micro services in Ruby for the Micro framework'
   # spec.description   = %q{TODO: Write a longer description or delete this line.}
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = 'MIT'

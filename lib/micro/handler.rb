@@ -8,7 +8,7 @@ module MicroRb
       include SemanticLogger::Loggable
 
       def self.handler(options)
-        fail 'Missing name' unless options.key?(:name)
+        raise 'Missing name' unless options.key?(:name)
 
         class_attribute :name
         public_send('name=', options[:name])

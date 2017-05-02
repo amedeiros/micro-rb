@@ -10,7 +10,7 @@ module MicroRb
       end
 
       def self.http(path, request)
-        post(path, { query: request })
+        post(path, query: request)
       end
     end
   end

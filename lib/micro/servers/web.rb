@@ -14,26 +14,43 @@ module MicroRb
       attr_accessor :host, :port, :show_errors, :debug
       attr_accessor :handlers, :name, :node_id, :server
 
-      def initialize(name, opts={})
+      REQUIRED_TYPES = { method: [String], params: [Hash, Array],
+                         id: [String, Integer, NilClass] }.freeze
+
+      REQUIRED_KEYS  = ['method'].freeze
+
+      def initialize(name, opts = {})
         self.port     = opts.delete(:port)  || 3000
         self.host     = opts.delete(:host)  || '0.0.0.0'
         self.debug    = opts.delete(:debug)
-        self.handlers = { }
+        self.handlers = {}
         self.name     = name
         self.node_id  = "#{name}-#{SecureRandom.uuid}"
-        self.server   = Rack::Server.new(opts.merge(Host: host, Port: port, app: self))
+
+        server_opts = opts.merge(Host: host, Port: port, app: self)
+        self.server = Rack::Server.new(server_opts)
       end
 
       def add_handler(handler)
-        fail "Handler must be of type MicroRb::Handler got #{handler.class}" unless handler.is_a?(MicroRb::Handler)
-        fail "Handler #{handler.name} has already been registered." if handlers.key?(handler.name)
+        unless handler.is_a?(MicroRb::Handler)
+          raise "Handler must be of type MicroRb::Handler got #{handler.class}"
+        end
+
+        if handlers.key?(handler.name)
+          raise "Handler #{handler.name} has already been registered."
+        end
 
         handlers[handler.name.to_sym] = handler
       end
 
       def start!
         response = MicroRb::Sidecar::Register.notify(self)
-        fail response unless response.blank?
+        raise response unless response.blank?
+
+        if debug
+          MicroRb.logger
+                 .debug("Registered #{name}:#{host}:#{port} with sidecar.")
+        end
 
         add_finalizer_hook!
         server.start
@@ -41,10 +58,10 @@ module MicroRb
 
       def to_h
         {
-            name: name,
-            nodes: [
-                { id: node_id, address: host, port: port }
-            ]
+          name: name,
+          nodes: [
+            { id: node_id, address: host, port: port }
+          ]
         }
       end
 
@@ -75,9 +92,12 @@ module MicroRb
       def create_response(request)
         method  = request['method']
         params  = request['params']
-        handler = handlers.select { |_, v| v.respond_to?(method.to_s.strip) }.values.first
+        handler = handlers.select { |_, v| v.respond_to?(method.to_s.strip) }
+        handler = handler.values.first
 
-        return error_response(MicroRb::Servers::Error::MethodNotFound.new(method), request) if handler.blank?
+        if handler.blank?
+          return error_response(Error::MethodNotFound.new(method), request)
+        end
 
         success_response(request, handler.send(method, request, params.first))
       end
@@ -87,12 +107,13 @@ module MicroRb
 
         begin
           if !validate_request(request)
-            response = error_response(MicroRb::Servers::Error::InvalidRequest.new, request)
+            response = error_response(Error::InvalidRequest.new, request)
           else
             response = create_response(request)
           end
         rescue StandardError => e
-          response = error_response(MicroRb::Servers::Error::InternalError.new(e), request)
+          puts e.message
+          response = error_response(Error::InternalError.new(e), request)
         end
 
         response
@@ -101,17 +122,15 @@ module MicroRb
       private
 
       def validate_request(request)
-        required_keys  = %w(method)
-        required_types = { method: [String], params: [Hash, Array], id: [String, Fixnum, Bignum, NilClass] }
-
         return false unless request.is_a?(Hash)
 
-        required_keys.each do |key|
-          return false unless request.has_key?(key)
+        REQUIRED_KEYS.each do |key|
+          return false unless request.key?(key)
         end
 
-        required_types.each do |key, types|
-          return false if request.has_key?(key) && !types.any? { |type| request[key].is_a?(type) }
+        REQUIRED_TYPES.each do |key, types|
+          return false if request.key?(key) &&
+                          types.none? { |type| request[key].is_a?(type) }
         end
 
         true

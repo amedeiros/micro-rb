@@ -8,7 +8,6 @@ module MicroRb
       CONTENT_TYPE = 'application/json'.freeze
       REGISTRY     = MicroRb::Configuration.default.sidecar_registry
 
-
       included do
         include HTTParty
         base_uri MicroRb::Configuration.default.sidecar_host
