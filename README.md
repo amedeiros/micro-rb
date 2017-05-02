@@ -60,7 +60,7 @@ end
 Want to run puma? No problem just add puma to your Gemfile and require the rack handler and tell the web server to use puma.
 This works with thin etc because we just pass the options along to the rack server. Try it with the sum example!
 
-```
+```ruby
 require 'rack/handler/puma'
 server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 ```
