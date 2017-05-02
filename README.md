@@ -57,9 +57,8 @@ MicroRb::Configuration.configure do |c|
 end
 ```
 
-<p align="center">
-  <img src="https://github.com/amedeiros/micro-rb/blob/master/example.png" />
-</p>
+
+![alt text](https://github.com/amedeiros/micro-rb/blob/master/example.png)
 
 ## Development
 
