@@ -112,7 +112,7 @@ module MicroRb
             response = create_response(request)
           end
         rescue StandardError => e
-          puts e.message
+          MicroRb.logger.warn(e)
           response = error_response(Error::InternalError.new(e), request)
         end
 
