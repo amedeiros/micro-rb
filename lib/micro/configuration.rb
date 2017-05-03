@@ -2,16 +2,22 @@
 
 module MicroRb
   class Configuration
+    include Singleton
+
     attr_accessor :sidecar_registry
     attr_accessor :sidecar_host
-
-    # The default Configuration object.
-    def self.default
-      @default ||= Configuration.new
-    end
+    attr_accessor :sidecar_port
 
     def self.configure
-      yield(default) if block_given?
+      yield(instance) if block_given?
+    end
+
+    def sidecar_uri
+      "#{sidecar_host}:#{sidecar_port}"
+    end
+
+    def sidecar_registry_uri
+      "#{sidecar_uri}#{sidecar_registry}"
     end
 
     private
@@ -19,8 +25,9 @@ module MicroRb
     def initialize
       yield(self) if block_given?
 
-      @sidecar_host     ||= 'http://127.0.0.1:8081'
-      @sidecar_registry ||= "#{sidecar_host}/registry"
+      self.sidecar_host     ||= 'http://127.0.0.1'
+      self.sidecar_registry ||= '/registry'
+      self.sidecar_port     ||= '8081'
     end
   end
 end

@@ -49,7 +49,9 @@ server.start!
 
 Configuration has the following defaults for sidecar endpoint.
 
-`Host: "http://127.0.0.1:8081"`
+`Host: "http://127.0.0.1"`
+
+`Port: 8081`
 
 `Registy: "/registry"`
 
@@ -58,7 +60,8 @@ Configuration can be changed.
 
 ```ruby
 MicroRb::Configuration.configure do |c|
-  c.sidecar_host     = 'http://mysite.com:8080'
+  c.sidecar_host     = 'http://mysite.com'
+  c.sidecar_port     = '8080'
   c.sidecar_registry = '/awesome_registry'
 end
 ```

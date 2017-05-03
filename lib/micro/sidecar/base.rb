@@ -6,11 +6,11 @@ module MicroRb
       extend ActiveSupport::Concern
 
       CONTENT_TYPE = 'application/json'.freeze
-      REGISTRY     = MicroRb::Configuration.default.sidecar_registry
+      REGISTRY     = MicroRb::Configuration.instance.sidecar_registry
 
       included do
         include HTTParty
-        base_uri MicroRb::Configuration.default.sidecar_host
+        base_uri MicroRb::Configuration.instance.sidecar_uri
 
         def self.options(body)
           { body: body.to_json, headers: { 'Content-Type' => CONTENT_TYPE } }
