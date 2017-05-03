@@ -6,11 +6,11 @@ module MicroRb
       include MicroRb::Sidecar::Base
 
       def self.notify(service)
-        post(REGISTRY, options(service))
+        post(registry_uri, options(service))
       end
 
       def self.remove(service)
-        delete(REGISTRY, options(service))
+        delete(registry_uri, options(service))
       end
     end
   end

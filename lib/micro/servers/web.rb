@@ -44,8 +44,8 @@ module MicroRb
       end
 
       def start!
-        response = MicroRb::Sidecar::Register.notify(self)
-        raise response unless response.blank?
+        # Value will raise an error on anything not 2XX
+        MicroRb::Sidecar::Register.notify(self).response.value
 
         if debug
           MicroRb.logger
@@ -54,6 +54,11 @@ module MicroRb
 
         add_finalizer_hook!
         server.start
+      rescue Net::HTTPFatalError => e
+        msg = "Sidecar error: #{e.message}"
+        MicroRb.logger.warn(msg)
+
+        raise MicroRb::Servers::Error::ServerError.new(-32000, msg)
       end
 
       def to_h
@@ -83,8 +88,7 @@ module MicroRb
       end
 
       def process(content)
-        request  = parse_request(content)
-        response = handle_request(request)
+        response = handle_request(content)
 
         MultiJson.encode(response)
       end
@@ -103,6 +107,7 @@ module MicroRb
       end
 
       def handle_request(request)
+        request  = parse_request(request)
         response = nil
 
         begin
@@ -111,6 +116,9 @@ module MicroRb
           else
             response = create_response(request)
           end
+        rescue MultiJson::ParseError => e
+          MicroRb.logger.warn(e)
+          response = error_response(Error::ParseError.new)
         rescue StandardError => e
           MicroRb.logger.warn(e)
           response = error_response(Error::InternalError.new(e), request)
@@ -140,7 +148,7 @@ module MicroRb
         { result: result, id: request['id'] }
       end
 
-      def error_response(error, request)
+      def error_response(error, request = {})
         { error: error.to_h, id: request['id'] }
       end
 
