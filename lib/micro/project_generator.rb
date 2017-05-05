@@ -40,7 +40,8 @@ module MicroRb
           File.join(name, 'test', "#{name}_test.rb"),
           File.join(name, 'README.md'),
           File.join(name, 'LICENSE'),
-          File.join(name, 'Gemfile')
+          File.join(name, 'Gemfile'),
+          File.join(name, 'Dockerfile'),
       ].each { |file| render_template(file, binding) }
 
       install
