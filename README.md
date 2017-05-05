@@ -77,6 +77,37 @@ server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 
 ![alt text](https://github.com/amedeiros/micro-rb/blob/master/example.png)
 
+
+## Project Generator
+
+```
+microrb <options>
+    -n, --new NAME                   Generate a new skeleton service.
+    -h, --help                       Display this help screen
+```
+
+
+To generate a new micro service project run the following.
+
+`microrb -n myservice`
+
+This will output a new project with the example sum service ready to run.
+
+```
+Generating new service called myservice...
+Complete...
+Run sidecar: micro sidecar
+Run micro web: micro --web_address 0.0.0.0:8080 web
+Run me:  ./myservice/bin/myservice
+```
+
+```
+./myservice/bin/myservice
+[2017-05-05 14:28:52] INFO  WEBrick 1.3.1
+[2017-05-05 14:28:52] INFO  ruby 2.3.1 (2017-03-06) [java]
+[2017-05-05 14:28:52] INFO  WEBrick::HTTPServer#start: pid=48485 port=3000
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

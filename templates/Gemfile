@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+gem 'rake'
+
+gem 'bundler'
+gem 'micro-rb'
+
+group :test do
+  gem 'minitest'
+  gem 'minitest-reporters'
+end

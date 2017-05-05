@@ -58,7 +58,7 @@ module MicroRb
         msg = "Sidecar error: #{e.message}"
         MicroRb.logger.warn(msg)
 
-        raise MicroRb::Servers::Error::ServerError.new(-32000, msg)
+        raise MicroRb::Servers::Error::ServerError.new(-32_000, msg)
       end
 
       def to_h
