@@ -83,19 +83,26 @@ server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 ```
 microrb <options>
     -n, --new NAME                   Generate a new skeleton service.
+    -e, --encryption                 Adds Symmetric Encryption gem to your new service.
     -h, --help                       Display this help screen
 ```
 
 
-To generate a new micro service project run the following.
+To generate a new micro service project run the following. Note this also adds [Symmetric Encryption](https://github.com/rocketjob/symmetric-encryption) gem with the -e flag.
 
-`microrb -n myservice`
+`microrb -n myservice -e`
 
 This will output a new project with the example sum service ready to run.
 
 ```
 Generating new service called myservice...
+Generating new service called myservice...
+Fetching gem metadata from https://rubygems.org/.............
+Fetching version metadata from https://rubygems.org/.
+Resolving dependencies...
+...... More bundler stuff here
 Complete...
+Please see https://rocketjob.github.io/symmetric-encryption/standalone.html for setting up SymmetricEncryption
 Run sidecar: micro sidecar
 Run micro web: micro --web_address 0.0.0.0:8080 web
 Run me:  ./myservice/bin/myservice

@@ -32,6 +32,10 @@ module MicroRb
           options[:new] = name
         end
 
+        opts.on '-e', '--encryption', 'Adds Symmetric Encryption gem to your new service.' do |encryption|
+          options[:encryption] = encryption
+        end
+
         opts.on '-h', '--help', 'Display this help screen' do
           puts opts
           exit
@@ -43,9 +47,11 @@ module MicroRb
       puts "Generating new service called #{options[:new]}..."
       name = options[:new]
 
-      ProjectGenerator.new(name).create!
+      ProjectGenerator.new(name, options[:encryption]).create!
 
       puts 'Complete...'
+      puts 'Please see https://rocketjob.github.io/symmetric-encryption/standalone.html'\
+' for setting up SymmetricEncryption' if options[:encryption]
       puts 'Run sidecar: micro sidecar'
       puts 'Run micro web: micro --web_address 0.0.0.0:8080 web'
       puts "Run me:  ./#{name}/bin/#{name}"

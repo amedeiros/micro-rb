@@ -4,6 +4,9 @@ gem 'rake'
 
 gem 'bundler'
 gem 'micro-rb'
+<% if @encryption %>
+gem 'symmetric-encryption'
+<%end%>
 
 group :test do
   gem 'minitest'
