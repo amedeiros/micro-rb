@@ -6,14 +6,17 @@ require 'erb'
 
 module MicroRb
   class ProjectGenerator
-    attr_reader :name, :class_name, :username, :year, :encryption
+    attr_reader :name, :class_name, :username,
+                :year, :encryption, :active_record, :engine
 
-    def initialize(name, encryption)
-      @class_name = name.classify
-      @encryption = encryption
-      @username   = ENV['USERNAME'] || ENV['USER']
-      @name       = name
-      @year       = Time.new.year
+    def initialize(name, encryption, active_record)
+      @active_record = active_record
+      @class_name    = name.classify
+      @encryption    = encryption
+      @username      = ENV['USERNAME'] || ENV['USER']
+      @name          = name
+      @year          = Time.new.year
+      @engine        = RUBY_ENGINE == 'jruby' ? 'activerecord-jdbcmysql-adapter' : 'mysql2'
     end
 
     def create!

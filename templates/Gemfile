@@ -7,6 +7,10 @@ gem 'micro-rb'
 <% if @encryption %>
 gem 'symmetric-encryption'
 <%end%>
+<% if @active_record %>
+gem 'activerecord'
+gem <%= "'#{@engine}'" %>
+<% end %>
 
 group :test do
   gem 'minitest'

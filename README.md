@@ -84,6 +84,7 @@ server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 microrb <options>
     -n, --new NAME                   Generate a new skeleton service.
     -e, --encryption                 Adds Symmetric Encryption gem to your new service.
+    -a, --activerecord               Adds ActiveRecord to your gemfile and a default DB setup.
     -h, --help                       Display this help screen
 ```
 

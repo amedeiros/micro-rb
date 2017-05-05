@@ -36,6 +36,10 @@ module MicroRb
           options[:encryption] = encryption
         end
 
+        opts.on '-a', '--activerecord', 'Adds ActiveRecord to your gemfile and a default DB setup.' do |ar|
+          options[:active_record] = ar
+        end
+
         opts.on '-h', '--help', 'Display this help screen' do
           puts opts
           exit
@@ -45,9 +49,11 @@ module MicroRb
 
     def generate_new
       puts "Generating new service called #{options[:new]}..."
-      name = options[:new]
+      active_record = options[:active_record]
+      encryption    = options[:encryption]
+      name          = options[:new]
 
-      ProjectGenerator.new(name, options[:encryption]).create!
+      ProjectGenerator.new(name, encryption, active_record).create!
 
       puts 'Complete...'
       puts 'Please see https://rocketjob.github.io/symmetric-encryption/standalone.html'\
