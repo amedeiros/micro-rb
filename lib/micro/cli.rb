@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'optparse'
-require_relative 'project_generator'
+require 'micro/project_generator'
 
 module MicroRb
   class CLI

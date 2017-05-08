@@ -2,7 +2,7 @@
 require 'bundler/setup'
 
 # Explicitly load any gems you need.
-require 'micro/microrb'
+require 'microrb'
 require '<%= @name %>/version'
 require '<%= @name %>/handlers/example_handler'
 
