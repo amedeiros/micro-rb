@@ -1,7 +1,7 @@
 # MicroRb
 
 MicroRb allows you to develop micro services for the [micro](https://github.com/micro/micro) framework.
-MicroRb uses the [sidecar](https://github.com/micro/micro/tree/master/car) that comes with micro. If you want to write services in Go see [go-micro](https://github.com/micro/go-micro) or in java see [ja-micro](https://github.com/Sixt/ja-micro). 
+MicroRb uses the [sidecar](https://github.com/micro/micro/tree/master/car) that comes with micro. If you want to write services in Go see [go-micro](https://github.com/micro/go-micro) or in java see [ja-micro](https://github.com/Sixt/ja-micro).
 
 ## Installation
 
@@ -66,9 +66,9 @@ class MyHandler
   include MicroRb::Handler
   include MicroRb::SumHandler
 
-  handler name: :test, metadata: { hello: 'Micro-Rb' }
+  handler name: :test, metadata: { hello: 'Micro-Rb' }, rpc_method: :sum
 
-  def sum(request: Request, response: Response)
+  def sum(request: Request.new, response: Response.new)
     response.total = request.a + request.b
 
     response
@@ -107,6 +107,13 @@ This works with thin etc because we just pass the options along to the rack serv
 require 'rack/handler/puma'
 server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 ```
+
+Every handler must setup the following requirements at a minimum.
+`handler name: :my_name, rpc_method: :some_method`
+
+The `:rpc_method` must accept named parameters of `request:` and `response:`
+
+Every handler must include a prtobuf module that has `Request` and `Response` constanst generated from protoc.
 
 
 ![alt text](https://github.com/amedeiros/micro-rb/blob/master/registry.png)

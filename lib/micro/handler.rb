@@ -9,6 +9,7 @@ module MicroRb
 
       def self.handler(options)
         raise 'Missing name' unless options.key?(:name)
+        raise 'Missing rpc_method' unless options.key?(:rpc_method)
         raise 'Metadata should be a Hash' if options.key?(:metadata) && !options.is_a?(Hash)
 
         class_attribute :name
@@ -16,10 +17,13 @@ module MicroRb
 
         class_attribute :metadata
         public_send('metadata=', options[:metadata] || {})
+
+        class_attribute :rpc_method
+        public_send('rpc_method=', options[:rpc_method].to_sym)
       end
 
-      def rpc_methods
-        self.methods - Object.methods - non_rpc_methods
+      def full_rpc_name
+        "#{self.class}.#{rpc_method}"
       end
 
       def request_structure
@@ -31,12 +35,6 @@ module MicroRb
       end
 
       private
-
-      def non_rpc_methods
-        [:name=, :name, :name?, :logger, :logger=,
-         :rpc_methods, :request_structure, :response_structure,
-         :metadata, :metadata=, :metadata?]
-      end
 
       def build_structure(type)
         structure_values = []

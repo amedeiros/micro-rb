@@ -5,9 +5,9 @@ module <%= @class_name %>
   class ExampleHandler
     include MicroRb::Handler
     include <%= @class_name %>::SumHandler
-    handler name: :test, metadata: { hello: 'Micro-Rb' }
+    handler name: :example, metadata: { hello: 'Micro-Rb' }, rpc_method: :sum
 
-    def sum(request: Request, response: Response)
+    def sum(request: Request.new, response: Response.new)
       response.total = request.a + request.b
 
       response

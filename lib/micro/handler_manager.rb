@@ -5,17 +5,17 @@ module MicroRb
     attr_reader :handlers, :rpc_methods, :endpoints
 
     def initialize
-      @handlers    = {}
+      @handlers    = []
       @rpc_methods = {}
       @endpoints   = []
     end
 
     def add_handler(handler)
       validate_handler(handler)
-      add_rpc_methods(handler)
+      add_rpc_method(handler)
       add_endpoints(handler)
 
-      handlers[handler.name] = handler
+      handlers << handler.name
     end
 
     def rpc_method(method)
@@ -41,7 +41,7 @@ module MicroRb
         raise "Handler must be of type MicroRb::Handler got #{handler.class}"
       end
 
-      if handlers.key?(handler.name)
+      if handlers.include?(handler.name)
         raise "Handler #{handler.name} has already been registered."
       end
     end
@@ -52,22 +52,14 @@ module MicroRb
       end
     end
 
-    def add_rpc_methods(handler)
-      handler.rpc_methods.each do |method|
-        validate_method_missing(method)
-        rpc_methods[method.to_sym] = handler.method(method)
-      end
+    def add_rpc_method(handler)
+      validate_method_missing(handler.full_rpc_name)
+      rpc_methods[handler.full_rpc_name.to_sym] = handler.method(handler.rpc_method)
     end
 
     def add_endpoints(handler)
-      points = []
-
-      handler.rpc_methods.each do |method|
-        points << { name: method, request: handler.request_structure,
-                  response: handler.response_structure, metadata: handler.metadata }
-      end
-
-      @endpoints += points
+      @endpoints << { name: handler.full_rpc_name, request: handler.request_structure,
+                      response: handler.response_structure, metadata: handler.metadata }
     end
   end
 end
