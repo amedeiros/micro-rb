@@ -64,10 +64,22 @@ module MicroRb
       def to_h
         {
           name: name,
-          nodes: [
-            { id: node_id, address: host, port: port }
-          ]
+          nodes: [ { id: node_id, address: host, port: port } ],
+          endpoints: endpoints
         }
+      end
+
+      def endpoints
+        points = []
+
+        handlers.values.each do |handler|
+          handler.rpc_methods.each do |method|
+            point = { name: method, request: handler.request_structure, response: handler.response_structure}
+            points << point
+          end
+        end
+
+        points
       end
 
       def to_json
@@ -95,15 +107,16 @@ module MicroRb
 
       def create_response(request)
         method  = request['method']
-        params  = request['params']
-        handler = handlers.select { |_, v| v.respond_to?(method.to_s.strip) }
+        params = request['params'].map(&:symbolize_keys!)
+        handler = handlers.select { |_, v| v.rpc_methods.include?(method.strip.to_sym) }
         handler = handler.values.first
+        request_params = handler.class::Request.new(*params)
 
         if handler.blank?
           return error_response(Error::MethodNotFound.new(method), request)
         end
 
-        success_response(request, handler.send(method, request, params.first))
+        success_response(request, handler.send(method, request: request_params, response: handler.class::Response.new))
       end
 
       def handle_request(request)

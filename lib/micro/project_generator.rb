@@ -37,6 +37,8 @@ module MicroRb
           File.join(name, 'lib', "#{name}.rb"),
           File.join(name, 'lib', name, 'version.rb'),
           File.join(name, 'lib', name, 'handlers', 'example_handler.rb'),
+          File.join(name, 'lib', name, 'proto', 'sum_pb.rb'),
+          File.join(name, 'lib', name, 'proto', 'sum.proto'),
           File.join(name, 'test', "#{name}_test.rb"),
           File.join(name, 'README.md'),
           File.join(name, 'LICENSE'),

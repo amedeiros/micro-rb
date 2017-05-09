@@ -29,22 +29,56 @@ Or install it yourself as:
 
 Currently in development. If I can get some pull requests that would be much appreciated.
 
+## Google Protobufs
+
+Currently supporting protobufs where each handler includes the module generated with requiring a Response and Request type. The example below is for the sum handler. 
+
+`$ protoc --ruby_out=. sum.proto`
+
+
+```proto
+syntax = "proto3";
+
+package micro_rb.sum_handler;
+
+service Sum {
+    rpc Sum(Request) returns (Response) { }
+}
+
+message Request {
+    int32 a = 1;
+    int32 b = 2;
+}
+
+message Response {
+    int32 total = 1;
+}
+
+```
+
 ## Usage
 
 ```ruby
-class Myhandler
+require 'microrb'
+require_relative '../examples/proto/sum_pb'
+
+class MyHandler
   include MicroRb::Handler
+  include MicroRb::SumHandler
+
   handler name: :test
 
-  def sum(request, params)
-    { total: params['a'] + params['b'] }
+  def sum(request: Request, response: Response)
+    response.total = request.a + request.b
+
+    response
   end
 end
 
-
 server = MicroRb::Servers::Web.new(:test, debug: true)
-server.add_handler Myhandler.new
+server.add_handler MyHandler.new
 server.start!
+
 ```
 
 Configuration has the following defaults for sidecar endpoint.
@@ -75,7 +109,8 @@ server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 ```
 
 
-![alt text](https://github.com/amedeiros/micro-rb/blob/master/example.png)
+![alt text](https://github.com/amedeiros/micro-rb/blob/master/registry.png)
+![alt text](https://github.com/amedeiros/micro-rb/blob/master/sum.png)
 
 
 ## Project Generator
