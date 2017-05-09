@@ -19,23 +19,11 @@ module MicroRb
       end
 
       def request_structure
-        request_values  = []
-
-        self.class::Request.descriptor.entries.each do |descriptor|
-          request_values << { name: descriptor.name, type: descriptor.type }
-        end
-
-        { values: request_values }
+        build_structure(self.class::Request)
       end
 
       def response_structure
-        response_values  = []
-
-        self.class::Response.descriptor.entries.each do |descriptor|
-          response_values << { name: descriptor.name, type: descriptor.type }
-        end
-
-        { values: response_values }
+        build_structure(self.class::Response)
       end
 
       private
@@ -43,6 +31,16 @@ module MicroRb
       def non_rpc_methods
         [:name=, :name, :name?, :logger, :logger=,
          :rpc_methods, :request_structure, :response_structure]
+      end
+
+      def build_structure(type)
+        structure_values = []
+
+        type.descriptor.entries.each do |descriptor|
+          structure_values << { name: descriptor.name, type: descriptor.type }
+        end
+
+        { values: structure_values }
       end
     end
   end
