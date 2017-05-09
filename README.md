@@ -113,6 +113,38 @@ server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
 ![alt text](https://github.com/amedeiros/micro-rb/blob/master/sum.png)
 
 
+## Micro API Gateway
+
+`micro api --address 0.0.0.0:3002`
+
+```
+$ http POST 0.0.0.0:3002/rpc method=sum service=test request='{"a": 1, "b": 2}'
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE
+Content-Length: 11
+Content-Type: application/json
+Date: Tue, 09 May 2017 17:50:47 GMT
+
+{
+    "total": 3
+}
+```
+
+## Calling the service directly
+
+```
+$ http POST 0.0.0.0:3000 service=test method=sum id=1 params:='[{"a": 1, "b": 2}]'
+HTTP/1.1 200 OK
+Connection: Keep-Alive
+Content-Length: 31
+Date: Tue, 09 May 2017 18:08:25 GMT
+Server: WEBrick/1.3.1 (Ruby/2.4.0/2016-12-24)
+
+{"result":{"total":3},"id":"1"}
+```
+
 ## Project Generator
 
 ```
