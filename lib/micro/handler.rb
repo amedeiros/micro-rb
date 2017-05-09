@@ -23,7 +23,7 @@ module MicroRb
       end
 
       def full_rpc_name
-        "#{self.class}.#{rpc_method}"
+        "#{self.class.to_s.split('::').last}.#{rpc_method}"
       end
 
       def request_structure

@@ -35,6 +35,9 @@ module MicroRb
       end
 
       def start!
+        # Register the debug handler. This is kinda poor.
+        add_handler(MicroRb::Handlers::Debug.new)
+
         # Value will raise an error on anything not 2XX
         MicroRb::Sidecar::Register.notify(self).response.value
 

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package micro_rb.debug;
+
+message Request {}
+
+message Response {
+    // default: ok
+    string status = 1;
+}
