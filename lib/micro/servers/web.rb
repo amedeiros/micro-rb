@@ -5,14 +5,11 @@ require 'rack/request'
 require 'rack/response'
 require 'multi_json'
 
-##############
-# INCOMPLETE #
-##############
 module MicroRb
   module Servers
     class Web
       attr_accessor :host, :port, :show_errors, :debug
-      attr_accessor :handlers, :name, :node_id, :server
+      attr_accessor :handler_manager, :name, :node_id, :server
 
       REQUIRED_TYPES = { method: [String], params: [Hash, Array],
                          id: [String, Integer, NilClass] }.freeze
@@ -20,27 +17,19 @@ module MicroRb
       REQUIRED_KEYS  = ['method'].freeze
 
       def initialize(name, opts = {})
-        self.port     = opts.delete(:port)  || 3000
-        self.host     = opts.delete(:host)  || '0.0.0.0'
-        self.debug    = opts.delete(:debug)
-        self.handlers = {}
-        self.name     = name
-        self.node_id  = "#{name}-#{SecureRandom.uuid}"
+        self.port    = opts.delete(:port)  || 3000
+        self.host    = opts.delete(:host)  || '0.0.0.0'
+        self.debug   = opts.delete(:debug)
+        self.name    = name
+        self.node_id = "#{name}-#{SecureRandom.uuid}"
+        self.handler_manager = MicroRb::HandlerManager.new
 
         server_opts = opts.merge(Host: host, Port: port, app: self)
         self.server = Rack::Server.new(server_opts)
       end
 
       def add_handler(handler)
-        unless handler.is_a?(MicroRb::Handler)
-          raise "Handler must be of type MicroRb::Handler got #{handler.class}"
-        end
-
-        if handlers.key?(handler.name)
-          raise "Handler #{handler.name} has already been registered."
-        end
-
-        handlers[handler.name.to_sym] = handler
+        handler_manager.add_handler(handler)
       end
 
       def start!
@@ -65,21 +54,8 @@ module MicroRb
         {
           name: name,
           nodes: [ { id: node_id, address: host, port: port } ],
-          endpoints: endpoints
+          endpoints: handler_manager.endpoints
         }
-      end
-
-      def endpoints
-        points = []
-
-        handlers.values.each do |handler|
-          handler.rpc_methods.each do |method|
-            point = { name: method, request: handler.request_structure, response: handler.response_structure}
-            points << point
-          end
-        end
-
-        points
       end
 
       def to_json
@@ -106,17 +82,18 @@ module MicroRb
       end
 
       def create_response(request)
-        method  = request['method']
-        params = request['params'].map(&:symbolize_keys!)
-        handler = handlers.select { |_, v| v.rpc_methods.include?(method.strip.to_sym) }
-        handler = handler.values.first
-        request_params = handler.class::Request.new(*params)
+        method  = request['method'].strip.to_sym
+        params  = request['params'].map(&:symbolize_keys!)
 
-        if handler.blank?
+        unless handler_manager.rpc_method?(method)
           return error_response(Error::MethodNotFound.new(method), request)
         end
 
-        success_response(request, handler.send(method, request: request_params, response: handler.class::Response.new))
+        rpc_method = handler_manager.rpc_method(method)
+        response   = rpc_method.call(request: handler_manager.rpc_method_request(method, params),
+                                     response: handler_manager.rpc_method_response(method))
+
+        success_response(request, response)
       end
 
       def handle_request(request)
@@ -124,10 +101,10 @@ module MicroRb
         response = nil
 
         begin
-          if !validate_request(request)
-            response = error_response(Error::InvalidRequest.new, request)
-          else
+          if validate_request(request)
             response = create_response(request)
+          else
+            response = error_response(Error::InvalidRequest.new, request)
           end
         rescue MultiJson::ParseError => e
           MicroRb.logger.warn(e)
