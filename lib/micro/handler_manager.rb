@@ -63,8 +63,8 @@ module MicroRb
       points = []
 
       handler.rpc_methods.each do |method|
-        point = { name: method, request: handler.request_structure, response: handler.response_structure }
-        points << point
+        points << { name: method, request: handler.request_structure,
+                  response: handler.response_structure, metadata: handler.metadata }
       end
 
       @endpoints += points

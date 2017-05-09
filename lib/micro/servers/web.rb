@@ -8,7 +8,7 @@ require 'multi_json'
 module MicroRb
   module Servers
     class Web
-      attr_accessor :host, :port, :show_errors, :debug
+      attr_accessor :host, :port, :show_errors, :debug, :metadata, :version
       attr_accessor :handler_manager, :name, :node_id, :server
 
       REQUIRED_TYPES = { method: [String], params: [Hash, Array],
@@ -17,11 +17,13 @@ module MicroRb
       REQUIRED_KEYS  = ['method'].freeze
 
       def initialize(name, opts = {})
-        self.port    = opts.delete(:port)  || 3000
-        self.host    = opts.delete(:host)  || '0.0.0.0'
-        self.debug   = opts.delete(:debug)
-        self.name    = name
-        self.node_id = "#{name}-#{SecureRandom.uuid}"
+        self.port     = opts.delete(:port)  || 3000
+        self.host     = opts.delete(:host)  || '0.0.0.0'
+        self.metadata = opts.delete(:metadata) || {}
+        self.version  = opts.delete(:version) || '0.0.1'
+        self.debug    = opts.delete(:debug)
+        self.name     = name
+        self.node_id  = "#{name}-#{SecureRandom.uuid}"
         self.handler_manager = MicroRb::HandlerManager.new
 
         server_opts = opts.merge(Host: host, Port: port, app: self)
@@ -52,6 +54,8 @@ module MicroRb
 
       def to_h
         {
+          version: version,
+          metadata: metadata,
           name: name,
           nodes: [ { id: node_id, address: host, port: port } ],
           endpoints: handler_manager.endpoints
