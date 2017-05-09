@@ -101,11 +101,8 @@ module MicroRb
         response = nil
 
         begin
-          if validate_request(request)
-            response = create_response(request)
-          else
-            response = error_response(Error::InvalidRequest.new, request)
-          end
+          response = create_response(request) if valid_request?(request)
+          response ||= error_response(Error::InvalidRequest.new, request)
         rescue MultiJson::ParseError => e
           MicroRb.logger.warn(e)
           response = error_response(Error::ParseError.new)
@@ -119,7 +116,7 @@ module MicroRb
 
       private
 
-      def validate_request(request)
+      def valid_request?(request)
         return false unless request.is_a?(Hash)
 
         REQUIRED_KEYS.each do |key|

@@ -41,7 +41,8 @@ module MicroRb
       private
 
       def non_rpc_methods
-        [:name=, :name, :name?, :logger, :logger=, :rpc_methods, :request_structure, :response_structure]
+        [:name=, :name, :name?, :logger, :logger=,
+         :rpc_methods, :request_structure, :response_structure]
       end
     end
   end
