@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/amedeiros/micro-rb.svg?branch=master)](https://travis-ci.org/amedeiros/micro-rb)
+
 # MicroRb
 
 MicroRb allows you to develop micro services for the [micro](https://github.com/micro/micro) framework.
