@@ -7,12 +7,6 @@ MicroRb uses the [sidecar](https://github.com/micro/micro/tree/master/car) that 
 
 ## Installation
 
-Currently not on rubygems install with bundler and git
-
-```ruby
-gem 'micro-rb', github: 'amedeiros/micro-rb'
-````
-
 Add this line to your application's Gemfile:
 
 ```ruby
