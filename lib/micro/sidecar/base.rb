@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'httparty'
+
 module MicroRb
   module Sidecar
     module Base

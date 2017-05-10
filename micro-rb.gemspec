@@ -36,4 +36,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'minitest-reporters', '~> 1.1'
   spec.add_development_dependency 'shoulda', '~> 3.5'
+
+  spec.add_runtime_dependency 'activesupport', '~> 5.1', '>= 5.1.0'
+  spec.add_runtime_dependency 'httparty', '~> 0.14.0'
+  spec.add_runtime_dependency 'multi_json', '~> 1.12', '>= 1.12.1'
+  spec.add_runtime_dependency 'rack', '~> 1.6', '>= 1.6.5'
+  spec.add_runtime_dependency 'semantic_logger', '~> 4.0', '>= 4.0.0'
+  spec.add_runtime_dependency 'google-protobuf', '~> 3.3', '>= 3.3.0'
 end

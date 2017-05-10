@@ -1,5 +1,6 @@
 # coding: utf-8
 
+require 'bundler/setup'
 require 'active_support/all'
 require 'semantic_logger'
 
@@ -10,9 +11,6 @@ module MicroRb
     ActiveSupport::StringInquirer.new(ENV['MICRO_ENV'] || 'development')
   end
 end
-
-require 'bundler/setup'
-Bundler.require(:default, MicroRb.env)
 
 require 'micro/version'
 require 'micro/configuration'
