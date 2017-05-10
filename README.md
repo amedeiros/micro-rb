@@ -19,7 +19,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install micro-rb
+    $ gem install micro-rb -v '0.1.0.rc1'
 
 ## Status
 
