@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 module MicroRb
   class HandlerManager
@@ -45,9 +46,7 @@ module MicroRb
         raise "Handler #{handler.name} has already been registered."
       end
 
-      unless handler.valid?
-        raise "Handler #{handler.name} is invalid."
-      end
+      raise "Handler #{handler.name} is invalid." unless handler.valid?
     end
 
     def add_rpc_method(handler)

@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 module MicroRb
   module Handler
@@ -41,9 +42,9 @@ module MicroRb
 
       def valid?
         self.class.constants.include?(:Request) &&
-            self.class.constants.include?(:Response) &&
-            name.present? &&
-            rpc_method.present?
+          self.class.constants.include?(:Response) &&
+          name.present? &&
+          rpc_method.present?
       end
 
       private

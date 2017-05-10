@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 require 'optparse'
 require 'micro/project_generator'
@@ -56,8 +57,10 @@ module MicroRb
       ProjectGenerator.new(name, encryption, active_record).create!
 
       puts 'Complete...'
-      puts 'Please see https://rocketjob.github.io/symmetric-encryption/standalone.html'\
-' for setting up SymmetricEncryption' if options[:encryption]
+      if options[:encryption]
+        puts 'Please see https://rocketjob.github.io/symmetric-encryption/standalone.html'\
+' for setting up SymmetricEncryption'
+      end
       puts 'Run sidecar: micro sidecar'
       puts 'Run micro web: micro --web_address 0.0.0.0:8080 web'
       puts "Run me:  ./#{name}/bin/#{name}"

@@ -1,3 +1,6 @@
+# coding: utf-8
+# frozen_string_literal: true
+
 require 'google/protobuf'
 
 Google::Protobuf::DescriptorPool.generated_pool.build do
@@ -11,8 +14,10 @@ end
 
 module MicroRb
   module TestHandler
-    Request  = Google::Protobuf::DescriptorPool.generated_pool.lookup('micro_rb.test_handler.Request').msgclass
-    Response = Google::Protobuf::DescriptorPool.generated_pool.lookup('micro_rb.test_handler.Response').msgclass
+    Request  = Google::Protobuf::DescriptorPool.generated_pool
+                                               .lookup('micro_rb.test_handler.Request').msgclass
+    Response = Google::Protobuf::DescriptorPool.generated_pool
+                                               .lookup('micro_rb.test_handler.Response').msgclass
   end
 end
 

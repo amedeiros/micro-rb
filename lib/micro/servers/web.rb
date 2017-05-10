@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 require 'rack'
 require 'rack/request'
@@ -60,7 +61,7 @@ module MicroRb
           version: version,
           metadata: metadata,
           name: name,
-          nodes: [ { id: node_id, address: host, port: port } ],
+          nodes: [{ id: node_id, address: host, port: port }],
           endpoints: handler_manager.endpoints
         }
       end

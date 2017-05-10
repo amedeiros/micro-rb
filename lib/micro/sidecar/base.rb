@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 require 'httparty'
 
@@ -7,7 +8,7 @@ module MicroRb
     module Base
       extend ActiveSupport::Concern
 
-      CONTENT_TYPE = 'application/json'.freeze
+      CONTENT_TYPE = 'application/json'
 
       included do
         include HTTParty
