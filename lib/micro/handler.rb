@@ -34,6 +34,13 @@ module MicroRb
         build_structure(self.class::Response)
       end
 
+      def valid?
+        self.class.constants.include?(:Request) &&
+            self.class.constants.include?(:Response) &&
+            name.present? &&
+            rpc_method.present?
+      end
+
       private
 
       def build_structure(type)

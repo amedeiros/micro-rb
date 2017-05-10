@@ -44,6 +44,10 @@ module MicroRb
       if handlers.include?(handler.name)
         raise "Handler #{handler.name} has already been registered."
       end
+
+      unless handler.valid?
+        raise "Handler #{handler.name} is invalid."
+      end
     end
 
     def validate_method_missing(method)
