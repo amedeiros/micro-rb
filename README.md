@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/amedeiros/micro-rb.svg?branch=master)](https://travis-ci.org/amedeiros/micro-rb)
+[![Build Status](https://travis-ci.org/amedeiros/micro-rb.svg?branch=master)](https://travis-ci.org/amedeiros/micro-rb) [![Gem Version](https://badge.fury.io/rb/micro-rb.svg)](https://badge.fury.io/rb/micro-rb)
 
 # MicroRb
 
