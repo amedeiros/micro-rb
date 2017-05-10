@@ -2,10 +2,6 @@ syntax = "proto3";
 
 package micro_rb.sum_handler;
 
-service Sum {
-    rpc Sum(Request) returns (Response) { }
-}
-
 message Request {
     int32 a = 1;
     int32 b = 2;
