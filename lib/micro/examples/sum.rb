@@ -1,4 +1,4 @@
-require 'microrb'
+require_relative '../../../lib/microrb'
 require_relative '../examples/proto/sum_pb'
 
 class MyHandler

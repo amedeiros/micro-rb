@@ -121,7 +121,7 @@ Every handler must include a prtobuf module that has `Request` and `Response` co
 `micro api --address 0.0.0.0:3002`
 
 ```
-$ http POST 0.0.0.0:3002/rpc method=sum service=test request='{"a": 1, "b": 2}'
+$ http POST 0.0.0.0:3002/rpc method=MyHandler.sum service=test request='{"a": 1, "b": 2}'
 HTTP/1.1 200 OK
 Access-Control-Allow-Credentials: true
 Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
@@ -138,7 +138,7 @@ Date: Tue, 09 May 2017 17:50:47 GMT
 ## Calling the service directly
 
 ```
-$ http POST 0.0.0.0:3000 service=test method=sum id=1 params:='[{"a": 1, "b": 2}]'
+$ http POST 0.0.0.0:3000 service=test method=MyHandler.sum id=1 params:='[{"a": 1, "b": 2}]'
 HTTP/1.1 200 OK
 Connection: Keep-Alive
 Content-Length: 31
