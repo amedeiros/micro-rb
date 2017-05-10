@@ -50,20 +50,12 @@ module MicroRb
       end
     end
 
-    def validate_method_missing(method)
-      if rpc_methods.key?(method)
-        raise "Method #{method} has already been registered."
-      end
-    end
-
     def add_rpc_method(handler)
-      validate_method_missing(handler.full_rpc_name)
       rpc_methods[handler.full_rpc_name.to_sym] = handler.method(handler.rpc_method)
     end
 
     def add_endpoints(handler)
-      @endpoints << { name: handler.full_rpc_name, request: handler.request_structure,
-                      response: handler.response_structure, metadata: handler.metadata }
+      @endpoints << handler.endpoint_structure
     end
   end
 end

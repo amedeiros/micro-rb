@@ -34,6 +34,11 @@ module MicroRb
         build_structure(self.class::Response)
       end
 
+      def endpoint_structure
+        { name: full_rpc_name, request: request_structure,
+          response: response_structure, metadata: metadata }
+      end
+
       def valid?
         self.class.constants.include?(:Request) &&
             self.class.constants.include?(:Response) &&
