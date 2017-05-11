@@ -44,14 +44,8 @@ module MicroRb
     private
 
     def validate_handler(handler)
-      unless handler.is_a?(MicroRb::Handler)
-        raise "Handler must be of type MicroRb::Handler got #{handler.class}"
-      end
-
-      if handlers.include?(handler.name)
-        raise "Handler #{handler.name} has already been registered."
-      end
-
+      raise "Handler must be of type MicroRb::Handler got #{handler.class}" unless handler.is_a?(MicroRb::Handler)
+      raise "Handler #{handler.name} has already been registered." if handlers.include?(handler.name)
       raise "Handler #{handler.name} is invalid." unless handler.valid?
     end
 

@@ -9,8 +9,8 @@ require 'multi_json'
 module MicroRb
   module Servers
     class Web
-      attr_accessor :host, :port, :show_errors, :debug, :metadata, :version
-      attr_accessor :handler_manager, :name, :node_id, :server
+      attr_accessor :host, :port, :show_errors, :debug, :metadata, :version,
+                    :handler_manager, :name, :node_id, :server
 
       REQUIRED_TYPES = { method: [String], params: [Hash, Array],
                          id: [String, Integer, NilClass] }.freeze
@@ -18,10 +18,10 @@ module MicroRb
       REQUIRED_KEYS  = ['method'].freeze
 
       def initialize(name, opts = {})
-        self.port     = opts.delete(:port)  || 3000
-        self.host     = opts.delete(:host)  || '0.0.0.0'
+        self.port     = opts.delete(:port)     || 3000
+        self.host     = opts.delete(:host)     || '0.0.0.0'
         self.metadata = opts.delete(:metadata) || {}
-        self.version  = opts.delete(:version) || '0.0.1'
+        self.version  = opts.delete(:version)  || '0.0.1'
         self.debug    = opts.delete(:debug)
         self.name     = name
         self.node_id  = "#{name}-#{SecureRandom.uuid}"
@@ -79,23 +79,15 @@ module MicroRb
 
         return resp.finish unless req.post?
 
-        resp.write process(req.body.read)
+        resp.write handle_request(req.body.read)
         resp.finish
-      end
-
-      def process(content)
-        response = handle_request(content)
-
-        MultiJson.encode(response)
       end
 
       def create_response(request)
         method  = request['method'].strip.to_sym
         params  = request['params'].map(&:symbolize_keys!)
 
-        unless handler_manager.rpc_method?(method)
-          return error_response(Error::MethodNotFound.new(method), request)
-        end
+        return error_response(Error::MethodNotFound.new(method), request) unless handler_manager.rpc_method?(method)
 
         response = handler_manager.call_rpc_method(method, params)
 
@@ -117,7 +109,7 @@ module MicroRb
           response = error_response(Error::InternalError.new(e), request)
         end
 
-        response
+        MultiJson.encode(response)
       end
 
       private
