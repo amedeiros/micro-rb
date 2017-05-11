@@ -97,9 +97,7 @@ module MicroRb
           return error_response(Error::MethodNotFound.new(method), request)
         end
 
-        rpc_method = handler_manager.rpc_method(method)
-        response   = rpc_method.call(request: handler_manager.rpc_method_request(method, params),
-                                     response: handler_manager.rpc_method_response(method))
+        response = handler_manager.call_rpc_method(method, params)
 
         success_response(request, response)
       end

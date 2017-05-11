@@ -20,7 +20,7 @@ module MicroRb
     end
 
     def rpc_method(method)
-      rpc_methods[method.to_sym]
+      rpc_methods[method.to_sym].clone
     end
 
     def rpc_method?(method)
@@ -33,6 +33,12 @@ module MicroRb
 
     def rpc_method_request(method, params)
       rpc_method(method).owner::Request.new(*params)
+    end
+
+    def call_rpc_method(method, params)
+      rpc_method(method)
+        .call(request: rpc_method_request(method, params),
+              response: rpc_method_response(method))
     end
 
     private

@@ -99,5 +99,17 @@ class HandlerManagerTest < Minitest::Test
         assert_equal TestHandler::Request.new, @handler_manager.rpc_method_request(test_handler.full_rpc_name, {})
       end
     end
+
+    context '#call_rpc_method' do
+      should 'call the correct rpc method' do
+        handler = TestHandler.new
+        name    = 'Micro-rb'
+        expect  = "Hello, #{name}"
+        params  = [{name: name}]
+        @handler_manager.add_handler(handler)
+
+        assert_equal expect, @handler_manager.call_rpc_method(handler.full_rpc_name, params).msg
+      end
+    end
   end
 end
