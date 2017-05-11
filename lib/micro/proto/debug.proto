@@ -1,3 +1,5 @@
+// protoc --ruby_out=. debug.proto
+
 syntax = "proto3";
 
 package micro_rb.debug;
