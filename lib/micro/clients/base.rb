@@ -4,7 +4,7 @@
 require 'httparty'
 
 module MicroRb
-  module Sidecar
+  module Clients
     module Base
       extend ActiveSupport::Concern
 
@@ -17,8 +17,8 @@ module MicroRb
           { body: body.to_json, headers: { 'Content-Type' => CONTENT_TYPE } }
         end
 
-        def self.registry_uri
-          MicroRb::Configuration.instance.sidecar_registry_uri
+        def self.decode(json)
+          MultiJson.decode(json)
         end
       end
     end

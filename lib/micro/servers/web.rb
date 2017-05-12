@@ -40,7 +40,7 @@ module MicroRb
         add_handler(MicroRb::Handlers::Debug.new)
 
         # Value will raise an error on anything not 2XX
-        MicroRb::Sidecar::Register.notify(self).response.value
+        MicroRb::Clients::Sidecar.register(self).response.value
 
         if debug
           MicroRb.logger
@@ -140,7 +140,7 @@ module MicroRb
       def add_finalizer_hook!
         at_exit do
           MicroRb.logger.debug("Shutting down #{name}:#{host}:#{port}") if debug
-          MicroRb::Sidecar::Register.remove(self)
+          MicroRb::Clients::Sidecar.remove(self)
         end
       end
 

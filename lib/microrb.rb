@@ -15,9 +15,10 @@ end
 
 require 'micro/version'
 require 'micro/configuration'
-require 'micro/sidecar/base'
-require 'micro/sidecar/register'
-require 'micro/sidecar/call'
+require 'micro/clients/base'
+require 'micro/clients/sidecar'
+require 'micro/clients/rpc'
+require 'micro/clients/http'
 require 'micro/handler'
 require 'micro/handler_manager'
 require 'micro/servers/web'

@@ -1,0 +1,13 @@
+// protoc --ruby_out=. fib.proto
+
+syntax = "proto3";
+
+package micro_rb.fib_pb;
+
+message Request {
+    int32 n = 1;
+}
+
+message Response {
+    int32 n = 1;
+}

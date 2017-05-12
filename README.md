@@ -81,6 +81,13 @@ Configuration has the following defaults for sidecar endpoint.
 
 `Registy: "/registry"`
 
+Configuration has the following defaults for api gateway.
+
+`Host: http://127.0.0.1`
+
+`Port: 3002`
+
+`Rpc: "/rpc"`
 
 Configuration can be changed.
 
@@ -89,6 +96,10 @@ MicroRb::Configuration.configure do |c|
   c.sidecar_host     = 'http://mysite.com'
   c.sidecar_port     = '8080'
   c.sidecar_registry = '/awesome_registry'
+  
+  c.gateway_host  = 'http://mysite.com'
+  c.gateway_port  = '8080'
+  c.gateway_rpc   = '/awesome_micro_rb'
 end
 ```
 
@@ -131,6 +142,14 @@ Date: Tue, 09 May 2017 17:50:47 GMT
 }
 ```
 
+```ruby
+result = MicroRb::Clients::Rpc.call(service: 'test', method: 'MyHandler.sum', params: {a:1, b:2})
+ap result
+{
+    "total" => 3
+}
+```
+
 ## Calling the service directly
 
 ```
@@ -142,6 +161,19 @@ Date: Tue, 09 May 2017 18:08:25 GMT
 Server: WEBrick/1.3.1 (Ruby/2.4.0/2016-12-24)
 
 {"result":{"total":3},"id":"1"}
+```
+
+
+```ruby
+result = MicroRb::Clients::Http.call(uri: 'http://0.0.0.0:3000', service: 'test', method: 'MyHandler.sum', params: {a:1, b:2})
+ap result
+
+{
+    "result" => {
+        "total" => 3
+    },
+        "id" => nil
+}
 ```
 
 ## Project Generator
