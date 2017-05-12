@@ -19,19 +19,21 @@ class FibHandler
       return response
     end
 
-    left = MicroRb::Clients::Rpc.call(service: :test,
-                                      method: 'FibHandler.fibonacci',
-                                      params: Request.new(n: request.n - 1),
-                                      klass_response: Response).n
-
-    right = MicroRb::Clients::Rpc.call(service: :test,
-                                       method: 'FibHandler.fibonacci',
-                                       params: Request.new(n: request.n - 2),
-                                       klass_response: Response).n
+    left  = rpc_call(Request.new(n: request.n - 1))
+    right = rpc_call(Request.new(n: request.n - 2))
 
     response.n = left + right
 
     response
+  end
+
+  private
+
+  def rpc_call(request)
+    MicroRb::Clients::Rpc.call(service: :test,
+                               method: 'FibHandler.fibonacci',
+                               params: request,
+                               klass_response: Response).n
   end
 end
 
