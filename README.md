@@ -67,8 +67,10 @@ class MyHandler
   end
 end
 
-server = MicroRb::Servers::Web.new(:test, debug: true)
-server.add_handler MyHandler.new
+service_config = MicroRb::ServiceConfiguration.new(name: :test)
+service_config.add_handler(MyHandler.new)
+
+server = MicroRb::Servers::Web.new(service_config)
 server.start!
 
 ```

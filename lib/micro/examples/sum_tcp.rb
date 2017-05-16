@@ -4,7 +4,7 @@
 require_relative '../../../lib/microrb'
 require_relative '../examples/proto/sum_pb'
 
-class MyHandler
+class TcpSumExample
   include MicroRb::Handler
   include MicroRb::SumHandler
 
@@ -17,8 +17,8 @@ class MyHandler
   end
 end
 
-service_config = MicroRb::ServiceConfiguration.new(name: :test, metadata: { example: 'Service' })
-service_config.add_handler(MyHandler.new)
+service_config = MicroRb::ServiceConfiguration.new(name: :tcp_example)
+service_config.add_handler(TcpSumExample.new)
 
-server = MicroRb::Servers::Web.new(service_config)
+server = MicroRb::Servers::TCP.new(service_config)
 server.start!

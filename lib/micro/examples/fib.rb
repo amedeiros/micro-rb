@@ -37,8 +37,10 @@ class FibHandler
   end
 end
 
-server = MicroRb::Servers::Web.new(:test, debug: true, metadata: { example: 'Fib Service' }, server: :puma)
-server.add_handler FibHandler.new
+service_config = MicroRb::ServiceConfiguration.new(name: test, metadata: { example: 'Fib Service' }, server: :puma)
+service_config.add_handler(FibHandler.new)
+
+server = MicroRb::Servers::Web.new(service_config)
 server.start!
 
 # MicroRb::Clients::Rpc.call(service: :test, method: 'FibHandler.fibonacci', params: { n:  15 } )
