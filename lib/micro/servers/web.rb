@@ -10,12 +10,7 @@ module MicroRb
   module Servers
     class Web
       attr_accessor :host, :port, :show_errors, :debug, :metadata, :version,
-                    :handler_manager, :name, :node_id, :server
-
-      REQUIRED_TYPES = { method: [String], params: [Hash, Array],
-                         id: [String, Integer, NilClass] }.freeze
-
-      REQUIRED_KEYS  = ['method'].freeze
+                    :request_manager, :name, :node_id, :server
 
       def initialize(name, opts = {})
         self.port     = opts.delete(:port)     || 3000
@@ -25,14 +20,14 @@ module MicroRb
         self.debug    = opts.delete(:debug)
         self.name     = name
         self.node_id  = "#{name}-#{SecureRandom.uuid}"
-        self.handler_manager = MicroRb::HandlerManager.new
+        self.request_manager = MicroRb::RequestManager.new
 
         server_opts = opts.merge(Host: host, Port: port, app: self)
         self.server = Rack::Server.new(server_opts)
       end
 
       def add_handler(handler)
-        handler_manager.add_handler(handler)
+        request_manager.handler_manager.add_handler(handler)
       end
 
       def start!
@@ -62,7 +57,7 @@ module MicroRb
           metadata: metadata,
           name: name,
           nodes: [{ id: node_id, address: host, port: port }],
-          endpoints: handler_manager.endpoints
+          endpoints: request_manager.handler_manager.endpoints
         }
       end
 
@@ -79,73 +74,20 @@ module MicroRb
 
         return resp.finish unless req.post?
 
-        resp.write handle_request(req.body.read)
+        request  = req.body.read
+        response = request_manager.handle_request(request)
+
+        resp.write(response)
         resp.finish
       end
 
-      def create_response(request)
-        method  = request['method'].strip.to_sym
-        params  = request['params'].map(&:symbolize_keys!)
-
-        return error_response(Error::MethodNotFound.new(method), request) unless handler_manager.rpc_method?(method)
-
-        response = handler_manager.call_rpc_method(method, params)
-
-        success_response(request, response)
-      end
-
-      def handle_request(request)
-        request  = parse_request(request)
-        response = nil
-
-        begin
-          response = create_response(request) if valid_request?(request)
-          response ||= error_response(Error::InvalidRequest.new, request)
-        rescue MultiJson::ParseError => e
-          MicroRb.logger.warn(e)
-          response = error_response(Error::ParseError.new)
-        rescue StandardError => e
-          MicroRb.logger.warn(e)
-          response = error_response(Error::InternalError.new(e), request)
-        end
-
-        MultiJson.encode(response)
-      end
-
       private
-
-      def valid_request?(request)
-        return false unless request.is_a?(Hash)
-
-        REQUIRED_KEYS.each do |key|
-          return false unless request.key?(key)
-        end
-
-        REQUIRED_TYPES.each do |key, types|
-          return false if request.key?(key) &&
-                          types.none? { |type| request[key].is_a?(type) }
-        end
-
-        true
-      end
-
-      def success_response(request, result)
-        { result: result, id: request['id'] }
-      end
-
-      def error_response(error, request = {})
-        { error: error.to_h, id: request['id'] }
-      end
 
       def add_finalizer_hook!
         at_exit do
           MicroRb.logger.debug("Shutting down #{name}:#{host}:#{port}") if debug
           MicroRb::Clients::Sidecar.remove(self)
         end
-      end
-
-      def parse_request(request)
-        MultiJson.decode(request)
       end
     end
   end

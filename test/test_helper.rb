@@ -7,6 +7,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../lib/micro-rb')
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'shoulda'
+require 'mocha/mini_test'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new(color: true)
 ENV['MICRO_ENV'] ||= 'test'
