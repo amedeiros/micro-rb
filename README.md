@@ -110,7 +110,8 @@ This works with thin etc because we just pass the options along to the rack serv
 
 ```ruby
 require 'rack/handler/puma'
-server = MicroRb::Servers::Web.new(:test, debug: true, server: :puma)
+service_config = MicroRb::ServiceConfiguration.new(name: :test, server: :puma)
+server = MicroRb::Servers::Web.new(service_config)
 ```
 
 Every handler must setup the following requirements at a minimum.

@@ -37,7 +37,7 @@ class FibHandler
   end
 end
 
-service_config = MicroRb::ServiceConfiguration.new(name: test, metadata: { example: 'Fib Service' }, server: :puma)
+service_config = MicroRb::ServiceConfiguration.new(name: :test, metadata: { example: 'Fib Service' }, server: :puma)
 service_config.add_handler(FibHandler.new)
 
 server = MicroRb::Servers::Web.new(service_config)
