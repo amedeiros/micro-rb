@@ -12,6 +12,8 @@ module MicroRb
 
     def initialize(handler_manager = MicroRb::HandlerManager.new)
       @handler_manager = handler_manager
+      # Add the default debug handler
+      handler_manager.add_handler(MicroRb::Handlers::Debug.new)
     end
 
     def handle_request(request)
@@ -36,8 +38,7 @@ module MicroRb
 
     def create_response(request)
       method = request[:method].strip.to_sym
-      params = request[:params].map(&:symbolize_keys) if request[:params].is_a?(Array)
-      params ||= request[:params].symbolize_keys
+      params = Array.wrap(request[:params]).map(&:symbolize_keys)
 
       unless handler_manager.rpc_method?(method)
         return error_response(MicroRb::Servers::Error::MethodNotFound.new(method), request)

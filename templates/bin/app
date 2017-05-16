@@ -12,6 +12,9 @@ ActiveRecord::Base.establish_connection(
     password: ENV[:DB_PASSWORD]
 )
 <% end %>
-server = MicroRb::Servers::Web.new(:example_service, debug: true)
-server.add_handler <%= @class_name %>::ExampleHandler.new
+
+service_config = MicroRb::ServiceConfiguration(name: :example_service)
+service_config.add_handler(<%= @class_name %>::ExampleHandler.new)
+
+server = MicroRb::Servers::Web.new(service_config)
 server.start!
