@@ -19,7 +19,7 @@ module MicroRb
       end
 
       def shutdown
-        @server.close if @server
+        @server&.close
       end
 
       def start!
@@ -33,12 +33,12 @@ module MicroRb
         _, port, host = socket.peeraddr
         MicroRb.logger.debug("*** Received connection from #{host}:#{port}")
 
-        loop {
+        loop do
           request  = socket.readpartial(4096)
           response = service_config.request_manager.handle_request(request)
           socket.write(response)
           socket.flush
-        }
+        end
       rescue EOFError => e
         MicroRb.logger.debug("*** #{host}:#{port} disconnected", e)
         socket.close

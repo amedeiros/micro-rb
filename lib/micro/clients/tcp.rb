@@ -31,8 +31,8 @@ module MicroRb
 
       def self.call(service:, method:, params:, host:, port:, klass_response: nil)
         new(host, port)
-            .call(service: service, method: method,
-                  params: params, klass_response: klass_response)
+          .call(service: service, method: method,
+                params: params, klass_response: klass_response)
       end
     end
   end

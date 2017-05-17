@@ -23,11 +23,11 @@ module MicroRb
 
     def to_h
       {
-          version: version,
-          metadata: metadata,
-          name: name,
-          nodes: [{ id: node_id, address: host, port: port }],
-          endpoints: request_manager.handler_manager.endpoints
+        version: version,
+        metadata: metadata,
+        name: name,
+        nodes: [{ id: node_id, address: host, port: port }],
+        endpoints: request_manager.handler_manager.endpoints
       }
     end
 

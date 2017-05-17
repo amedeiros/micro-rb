@@ -1305,7 +1305,7 @@ Metrics/ModuleLength:
   Max: 100
 
 Metrics/ParameterLists:
-  Max: 5
+  Max: 6
   CountKeywordArgs: true
 
 Metrics/PerceivedComplexity:
