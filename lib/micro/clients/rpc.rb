@@ -6,10 +6,10 @@ module MicroRb
     class Rpc
       include Base
 
-      base_uri MicroRb::Configuration.instance.gateway_uri
+      base_uri MicroRb::Configuration.instance.api_uri
 
       def self.call(service:, method:, params:, klass_response: nil)
-        response = post(MicroRb::Configuration.instance.gateway_rpc,
+        response = post(MicroRb::Configuration.instance.api_rpc,
                         options(service: service, method: method, request: params))
 
         return klass_response.new(response.to_h.symbolize_keys!) if klass_response

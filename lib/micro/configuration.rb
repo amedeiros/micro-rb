@@ -8,8 +8,8 @@ module MicroRb
     # Sidecar settings
     attr_accessor :sidecar_registry, :sidecar_host, :sidecar_port
 
-    # API gateway settings
-    attr_accessor :gateway_host, :gateway_port, :gateway_rpc
+    # Micro API settings
+    attr_accessor :api_host, :api_port, :api_rpc
 
     def self.configure
       yield(instance) if block_given?
@@ -23,12 +23,12 @@ module MicroRb
       "#{sidecar_uri}#{sidecar_registry}"
     end
 
-    def gateway_uri
-      "#{gateway_host}:#{gateway_port}"
+    def api_uri
+      "#{api_host}:#{api_port}"
     end
 
-    def gateway_rpc_uri
-      "#{gateway_uri}#{gateway_rpc}"
+    def api_rpc_uri
+      "#{api_uri}#{api_rpc}"
     end
 
     private
@@ -41,10 +41,10 @@ module MicroRb
       self.sidecar_registry ||= '/registry'
       self.sidecar_port     ||= '8081'
 
-      # Default API gateway settings
-      self.gateway_host ||= 'http://127.0.0.1'
-      self.gateway_rpc  ||= '/rpc'
-      self.gateway_port ||= '3002'
+      # Default micro API settings
+      self.api_host ||= 'http://127.0.0.1'
+      self.api_rpc  ||= '/rpc'
+      self.api_port ||= '3002'
     end
   end
 end

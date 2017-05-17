@@ -83,7 +83,7 @@ Configuration has the following defaults for sidecar endpoint.
 
 `Registy: "/registry"`
 
-Configuration has the following defaults for api gateway.
+Configuration has the following defaults for the micro api.
 
 `Host: http://127.0.0.1`
 
@@ -99,9 +99,9 @@ MicroRb::Configuration.configure do |c|
   c.sidecar_port     = '8080'
   c.sidecar_registry = '/awesome_registry'
   
-  c.gateway_host  = 'http://mysite.com'
-  c.gateway_port  = '8080'
-  c.gateway_rpc   = '/awesome_micro_rb'
+  c.api_host  = 'http://mysite.com'
+  c.api_port  = '8080'
+  c.api_rpc   = '/awesome_micro_rb'
 end
 ```
 
@@ -126,7 +126,7 @@ Every handler must include a prtobuf module that has `Request` and `Response` co
 ![alt text](https://github.com/amedeiros/micro-rb/blob/master/sum.png)
 
 
-## Micro API Gateway
+## Micro API
 
 `micro api --address 0.0.0.0:3002`
 

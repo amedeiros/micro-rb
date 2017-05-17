@@ -20,17 +20,17 @@ class ConfigurationTest < Minitest::Test
         end
       end
 
-      context 'gateway' do
+      context 'api' do
         should 'have a default port' do
-          assert_equal '3002', MicroRb::Configuration.instance.gateway_port
+          assert_equal '3002', MicroRb::Configuration.instance.api_port
         end
 
         should 'have a default host' do
-          assert_equal 'http://127.0.0.1', MicroRb::Configuration.instance.gateway_host
+          assert_equal 'http://127.0.0.1', MicroRb::Configuration.instance.api_host
         end
 
         should 'have a default rpc endpoint' do
-          assert_equal '/rpc', MicroRb::Configuration.instance.gateway_rpc
+          assert_equal '/rpc', MicroRb::Configuration.instance.api_rpc
         end
       end
     end
@@ -44,9 +44,9 @@ class ConfigurationTest < Minitest::Test
           c.sidecar_host = host
           c.sidecar_registry = '/registry'
 
-          c.gateway_host = host
-          c.gateway_port = '3002'
-          c.gateway_rpc  = '/rpc'
+          c.api_host = host
+          c.api_port = '3002'
+          c.api_rpc  = '/rpc'
         end
       end
 
@@ -73,26 +73,26 @@ class ConfigurationTest < Minitest::Test
         end
       end
 
-      context 'gateway' do
+      context 'api' do
         should 'change the default port' do
           port = '8080'
-          MicroRb::Configuration.configure { |c| c.gateway_port = port }
+          MicroRb::Configuration.configure { |c| c.api_port = port }
 
-          assert_equal port, MicroRb::Configuration.instance.gateway_port
+          assert_equal port, MicroRb::Configuration.instance.api_port
         end
 
         should 'change the default host' do
           host = 'http://myhost.com'
-          MicroRb::Configuration.configure { |c| c.gateway_host = host }
+          MicroRb::Configuration.configure { |c| c.api_host = host }
 
-          assert_equal host, MicroRb::Configuration.instance.gateway_host
+          assert_equal host, MicroRb::Configuration.instance.api_host
         end
 
         should 'change the default rpc endpoint' do
           rpc = '/something_else'
-          MicroRb::Configuration.configure { |c| c.gateway_rpc = rpc }
+          MicroRb::Configuration.configure { |c| c.api_rpc = rpc }
 
-          assert_equal rpc, MicroRb::Configuration.instance.gateway_rpc
+          assert_equal rpc, MicroRb::Configuration.instance.api_rpc
         end
       end
     end
